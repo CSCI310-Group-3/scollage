@@ -1,5 +1,3 @@
 # scollage
 
-test Rafael
-CSCI 310 Group Project
-test commit slack
+CSCI 310 Group 3 Project 1
