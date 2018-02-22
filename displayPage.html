@@ -2,16 +2,12 @@
 <html>
 <style>
 	html{
-		height: 100%;
-		width: 100%;
 	}
 	body{
 		background-color: white;
-		height: 100%;
-		width: 100%;
 	}
 	div{
-		position: absolute;
+		position: relative;
 	}
 	input[type=submit]{
 		background-color: #696969;
@@ -34,34 +30,38 @@
 		width: 160px;
 	}
 	div#export{
-		margin-right: 200px;
-		margin-top: 100px;
+		right: 10%;
+		margin-top: -56px;
+		position: absolute;
 	}
 	div#input{
-		align: center;
-		margin-bottom: 105px;
+		padding-top: 10px;
+		margin-bottom: 20px;
+		margin-left: 40%;
+		margin-right: 40%;
+		position: relative;
 	}
 	div#gallery{
 		background-color: blue;
 		margin-bottom: 5px;
 		height: 100px;
 	}
-	div#collage-container{
-		min-width: 600px;
-		min-height: 800px;
-		max-width: 60%;
-		max-height: 60%;
-	}
 	h1#title{
 		text-align: center;
+		font-size: 24pt;
 	}
-	img#main-collage{
-		min-width: 600px;
-		min-height: 800px;
-		max-width: 60%;
-		max-height: 60%;
-		margin-right: auto;
-		margin-left: auto;
+	div#mainSpace{
+		padding-top: 5px;
+		width: 100%;
+		margin: 0 auto;
+		display: block;
+	}
+	img#mainCollage{
+		min-width: 800px ;
+		min-height: 600px;
+		max-width: 70vw;
+		max-height: 50vh;
+		margin: 0 auto;
 		display: block;
 	}
 </style>
@@ -71,21 +71,21 @@
 	</head>
 	<body>
 		<h1 id="title">Collage for Topic X</h1>
-			<img id="main-collage" src="http://www.shapecollage.com/collages/collage-apple.jpg">
 		<div id="export">
 			<form name="export" id="export" method="POST" action="" enctype="multipart/form-data">
 				<input type="Submit" id="exportButton" name="export" value="Export" />
 			</form>
 		</div>
-		<div id="mainSpace"></div>
+		<div id="mainSpace">
+			<img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg">
 			
-		<div id="input">
-		<form name="enterTopic" id="input" method="POST" action="" enctype="multipart/form-data">
-			<input type="text" name="topic" value="Enter topic" onfocus="this.value=''" />
-			<input type="Submit" id="submitButton" name="build" value="Build Another Collage" />
-		</form>
 		</div>
-		
+		<div id="input">
+			<form name="enterTopic" id="input" method="POST" action="" enctype="multipart/form-data">
+				<input type="text" id="inputBox" name="topic" placeholder="Enter topic"/>
+				<input type="Submit" id="submitButton" name="build" value="Build Another Collage" />
+			</form>
+		</div>
 		<div id="gallery"></div>
 		
 	</body>
