@@ -79,14 +79,25 @@
 			</div>
 		</div>
 		<div id="mainSpace">
-			<img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg">
+			<!-- <img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg"> -->
+			<img id="mainCollage" src="https://previews.123rf.com/images/asafeliason/asafeliason1402/asafeliason140200141/25981580-a-collage-of-travel-photos-from-around-the-world.jpg">
 		</div>
 		<div id="newInput">
 			<form name="enterTopic" id="inputForm" method="POST" action="" enctype="multipart/form-data">
-				<input type="text" id="inputBox" name="topic" placeholder="Enter topic"/>
-				<input type="Submit" id="submitButton" name="build" value="Build Another Collage" />
+				<input type="text" id="inputBox" name="topic" placeholder="Enter topic" onkeyup="stoppedTyping()" />
+				<input type="Submit" id="submitButton" name="build" value="Build Another Collage" disabled />
 			</form>
 		</div>
 		<div id="gallery"></div>
 	</body>
 </html>
+
+<script type="text/javascript">
+	function stoppedTyping(){
+        if(document.getElementById('inputBox').value.length > 0) { 
+            document.getElementById('submitButton').disabled = false; 
+        } else { 
+            document.getElementById('submitButton').disabled = true;
+        }
+    }
+</script>
