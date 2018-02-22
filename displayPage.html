@@ -24,14 +24,20 @@
 		border: 2px solid #696969;
 	}
 	#exportButton{
-		width: 70px;
+		width: 140px;
+		padding-right: 30px;
+		padding-left: 30px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		background-color: #696969;
+		color: white;
 	}
 	#submitButton{
 		width: 160px;
 	}
 	div#export{
-		right: 10%;
-		margin-top: -56px;
+		right: 15%;
+		margin-top: -52px;
 		position: absolute;
 	}
 	div#newInput{
@@ -73,18 +79,19 @@
 		<div id="header">
 			<h1 id="title">Collage for Topic X</h1>
 			<div id="export">
-				<form name="export" id="export" method="POST" action="" enctype="multipart/form-data">
+				<!-- <form name="export" id="export" method="POST" action="" enctype="multipart/form-data">
 					<input type="Submit" id="exportButton" name="export" value="Export" />
-				</form>
+				</form> -->
+				<a id = "exportButton" onclick="prepareDownload()" download>Export</a>
 			</div>
 		</div>
 		<div id="mainSpace">
-			<!-- <img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg"> -->
-			<img id="mainCollage" src="https://previews.123rf.com/images/asafeliason/asafeliason1402/asafeliason140200141/25981580-a-collage-of-travel-photos-from-around-the-world.jpg">
+			<img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg">
+			
 		</div>
 		<div id="newInput">
 			<form name="enterTopic" id="inputForm" method="POST" action="" enctype="multipart/form-data">
-				<input type="text" id="inputBox" name="topic" placeholder="Enter topic" onkeyup="stoppedTyping()" />
+				<input type="text" id="inputBox" name="topic" placeholder="Enter topic" onkeyup="editingStopped()"/>
 				<input type="Submit" id="submitButton" name="build" value="Build Another Collage" disabled />
 			</form>
 		</div>
@@ -93,11 +100,30 @@
 </html>
 
 <script type="text/javascript">
-	function stoppedTyping(){
+	function editingStopped(){
         if(document.getElementById('inputBox').value.length > 0) { 
             document.getElementById('submitButton').disabled = false; 
         } else { 
             document.getElementById('submitButton').disabled = true;
         }
+    }
+    function prepareDownload(){
+		var img = document.getElementById('mainCollage');
+
+    	// var canvas = document.createElement('canvas');
+    	// canvas.id = "myCanvas";
+    	// canvas.height = img.height;
+    	// canvas.width = img.width;
+    	// console.log('hi');
+    	// console.log(canvas.width);
+    	// console.log(canvas.height);
+    	// context = canvas.getContext('2d');
+    	// context.drawImage(img,0,0);
+    	// var newImg = canvas.toDataURL('image.png');
+    	// var exportDiv = document.getElementById('exportButton1');
+    	// exportDiv.href = newImg;
+
+    	var exportDiv = document.getElementById('exportButton1');
+    	exportDiv.href = img
     }
 </script>

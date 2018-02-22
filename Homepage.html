@@ -32,9 +32,19 @@
 	<body>
 		<div>
 		<form name="homePage" id="input" method="POST" action="" enctype="multipart/form-data">
-			<input type="text" name="topic" placeholder="Enter topic"/>
-			<input type="Submit" name="build" value="Build Collage" />
+			<input type="text" id="inputBox" name="topic" placeholder="Enter topic" onkeyup="editingStopped()"/>
+			<input type="Submit" id = "submitButton" name="build" value="Build Collage" disabled/>
 		</form>
 		</div>
 	</body>
 </html>
+
+<script type="text/javascript">
+	function editingStopped(){
+        if(document.getElementById('inputBox').value.length > 0) { 
+            document.getElementById('submitButton').disabled = false; 
+        } else { 
+            document.getElementById('submitButton').disabled = true;
+        }
+    }
+</script>
