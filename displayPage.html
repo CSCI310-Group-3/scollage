@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html>
 <style>
+	html{
+		height: 100%;
+		width: 100%;
+	}
 	body{
 		background-color: white;
+		height: 100%;
+		width: 100%;
 	}
 	div{
 		position: absolute;
@@ -40,13 +46,32 @@
 		margin-bottom: 5px;
 		height: 100px;
 	}
+	div#collage-container{
+		min-width: 600px;
+		min-height: 800px;
+		max-width: 60%;
+		max-height: 60%;
+	}
+	h1#title{
+		text-align: center;
+	}
+	img#main-collage{
+		min-width: 600px;
+		min-height: 800px;
+		max-width: 60%;
+		max-height: 60%;
+		margin-right: auto;
+		margin-left: auto;
+		display: block;
+	}
 </style>
 	<head>
 	<meta charset="UTF-8">
 	<title>Build A Collage</title>
 	</head>
 	<body>
-		<div id="title">Title</div>
+		<h1 id="title">Collage for Topic X</h1>
+			<img id="main-collage" src="http://www.shapecollage.com/collages/collage-apple.jpg">
 		<div id="export">
 			<form name="export" id="export" method="POST" action="" enctype="multipart/form-data">
 				<input type="Submit" id="exportButton" name="export" value="Export" />
