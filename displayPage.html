@@ -34,7 +34,7 @@
 		margin-top: -56px;
 		position: absolute;
 	}
-	div#input{
+	div#newInput{
 		padding-top: 10px;
 		padding-bottom: 10px;
 	}
@@ -70,23 +70,23 @@
 	<title>Build A Collage</title>
 	</head>
 	<body>
-		<h1 id="title">Collage for Topic X</h1>
-		<div id="export">
-			<form name="export" id="export" method="POST" action="" enctype="multipart/form-data">
-				<input type="Submit" id="exportButton" name="export" value="Export" />
-			</form>
+		<div id="header">
+			<h1 id="title">Collage for Topic X</h1>
+			<div id="export">
+				<form name="export" id="export" method="POST" action="" enctype="multipart/form-data">
+					<input type="Submit" id="exportButton" name="export" value="Export" />
+				</form>
+			</div>
 		</div>
 		<div id="mainSpace">
 			<img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg">
-			
 		</div>
-		<div id="input">
+		<div id="newInput">
 			<form name="enterTopic" id="inputForm" method="POST" action="" enctype="multipart/form-data">
 				<input type="text" id="inputBox" name="topic" placeholder="Enter topic"/>
 				<input type="Submit" id="submitButton" name="build" value="Build Another Collage" />
 			</form>
 		</div>
 		<div id="gallery"></div>
-		
 	</body>
 </html>
