@@ -78,7 +78,7 @@
 	}
 	div#galleryOuter{
 		width: 800px;
-		height: 80px;
+		height: 100px;
 		margin: 0 auto;
 		overflow: scroll;
 	}
@@ -87,7 +87,20 @@
 		overflow-y: hidden;
 		white-space: nowrap;
 		height: 80px;
+		padding-bottom: 10px;
 		margin: 0 auto;
+	}
+	/* scrollbar CSS */
+	::-webkit-scrollbar {
+  		-webkit-appearance: none;
+  		width: 6px;
+  		height: 6px;
+	}
+
+	::-webkit-scrollbar-thumb {
+  		border-radius: 2px;
+  		background-color: rgba(0,0,0,.5);
+  		-webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 	}
 
 </style>
@@ -213,12 +226,7 @@
     	
     	newCollageLink.appendChild(newCollageImg);
     	galleryMainDiv.appendChild(newCollageLink);
-    	console.log(newCollageNum);
     	clickedGallery(newCollageNum);
-    	
-
-
-
     }
 
 </script>
