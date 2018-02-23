@@ -28,7 +28,7 @@ public class CollageBuilder {
 	
 	
 	//rotates a given image with an angle
-	public BufferedImage rotate(BufferedImage img, int angle) {  
+	public static BufferedImage rotate(BufferedImage img, int angle) {  
         int w = img.getWidth();  
         int h = img.getHeight();  
 		BufferedImage rotatedImage = new BufferedImage(w, h, img.getType());  
@@ -46,7 +46,7 @@ public class CollageBuilder {
 	}
 	
 	//takes in an image, and the new sizing requirements
-	public BufferedImage resize(BufferedImage img, int newW, int newH) {  
+	public static BufferedImage resize(BufferedImage img, int newW, int newH) {  
         int w = img.getWidth();  
         int h = img.getHeight();  
         BufferedImage dimg = new BufferedImage(newW, newH, img.getType());  
