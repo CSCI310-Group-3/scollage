@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 <style>
 	html{
 	}
@@ -47,11 +46,6 @@
 	form#inputForm{
 		text-align: center;
 	}
-	div#gallery{
-		background-color: blue;
-		margin-bottom: 5px;
-		height: 100px;
-	}
 	h1#title{
 		text-align: center;
 		font-size: 24pt;
@@ -70,10 +64,33 @@
 		margin: 0 auto;
 		display: block;
 	}
+	img.galleryImage{
+		height: 80px;
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+	a.galleryLink{
+		height: 80px;
+	}
+	div#galleryOuter{
+		width: 800px;
+		height: 80px;
+		margin: 0 auto;
+		overflow: scroll;
+	}
+	div#galleryInner{
+		overflow-x: scroll;
+		overflow-y: hidden;
+		white-space: nowrap;
+		height: 80px;
+		margin: 0 auto;
+	}
+
 </style>
-	<head>
+<html>
+<head>
 	<meta charset="UTF-8">
-	<title>Build A Collage</title>
+	<title>Build Another Collage</title>
 	</head>
 	<body>
 		<div id="header">
@@ -95,7 +112,13 @@
 				<input type="Submit" id="submitButton" name="build" value="Build Another Collage" disabled />
 			</form>
 		</div>
-		<div id="gallery"></div>
+		<div id="galleryOuter">
+			<div id="galleryInner">
+				<a id="galleryCollage-1" class="galleryLink" onclick="clickedGallery('1')">
+					<img class="galleryImage" src="http://www.shapecollage.com/collages/collage-popart.jpg">
+				</a>
+			</div>
+		</div>
 	</body>
 </html>
 
@@ -125,5 +148,16 @@
 
     	var exportDiv = document.getElementById('exportButton1');
     	exportDiv.href = img
+    }
+    function clickedGallery(divNum){
+    	var anchorId = ("galleryCollage-" + divNum);
+    	var currDiv = document.getElementById(anchorId);
+    	var galleryImg = currDiv.children[0];
+
+    	var mainImg = document.getElementById('mainCollage');
+    	var tempImg = mainImg.src;
+
+    	mainImg.src = galleryImg.src;
+    	galleryImg.src = tempImg;
     }
 </script>
