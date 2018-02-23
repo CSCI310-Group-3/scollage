@@ -4,6 +4,7 @@
 	}
 	body{
 		background-color: white;
+
 	}
 	div{
 		position: relative;
@@ -30,6 +31,7 @@
 		padding-bottom: 5px;
 		background-color: #696969;
 		color: white;
+		text-decoration: none;
 	}
 	#submitButton{
 		width: 160px;
@@ -38,6 +40,7 @@
 		right: 15%;
 		margin-top: -52px;
 		position: absolute;
+		font-family: system-ui;
 	}
 	div#newInput{
 		padding-top: 10px;
@@ -49,6 +52,7 @@
 	h1#title{
 		text-align: center;
 		font-size: 24pt;
+		font-family: system-ui;
 	}
 	div#mainSpace{
 		padding-top: 5px;
@@ -122,6 +126,21 @@
 				<a id="galleryCollage-3" class="galleryLink" onclick="clickedGallery('3')">
 					<img class="galleryImage" src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/543c245dd9bef5de74267dbf6c54a86e" alt="USC">
 				</a>
+				<a id="galleryCollage-4" class="galleryLink" onclick="clickedGallery('4')">
+					<img class="galleryImage" src="https://s.abcnews.com/images/US/cute-dogs-gty-01-jpo-171116_12x5_992.jpg" alt="Dogs">
+				</a>
+				<a id="galleryCollage-5" class="galleryLink" onclick="clickedGallery('5')">
+					<img class="galleryImage" src="https://cdn.vox-cdn.com/thumbor/avciGramUJ8ljFGsKgmiBxShiS8=/0x0:3052x1934/1200x800/filters:focal(1282x723:1770x1211)/cdn.vox-cdn.com/uploads/chorus_image/image/55470069/669120050.0.jpg" alt="Soccer">
+				</a>
+				<a id="galleryCollage-6" class="galleryLink" onclick="clickedGallery('6')">
+					<img class="galleryImage" src="http://itmusings.com/pblog/300languages/100java/images/oracle_java.jpg" alt="Java">
+				</a>
+				<a id="galleryCollage-7" class="galleryLink" onclick="clickedGallery('7')">
+					<img class="galleryImage" src="https://static.pexels.com/photos/204611/pexels-photo-204611.jpeg" alt="Computer">
+				</a>
+				<a id="galleryCollage-8" class="galleryLink" onclick="clickedGallery('8')">
+					<img class="galleryImage" src="https://i.ytimg.com/vi/p3NXd3DhH08/maxresdefault.jpg" alt="Skateboard">
+				</a>
 			</div>
 		</div>
 	</body>
@@ -151,8 +170,8 @@
     	// var exportDiv = document.getElementById('exportButton1');
     	// exportDiv.href = newImg;
 
-    	var exportDiv = document.getElementById('exportButton1');
-    	exportDiv.href = img
+    	var exportDiv = document.getElementById('exportButton');
+    	exportDiv.href = img.src
     }
     function clickedGallery(divNum){
     	var clickedImgId = ("galleryCollage-" + divNum);
