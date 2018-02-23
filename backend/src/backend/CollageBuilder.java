@@ -42,6 +42,19 @@ public class CollageBuilder {
 		//populate the collages list with 30 collage objects
 		//apply rotations and sizing to all images in list
 	}
+    
+    public static BufferedImage concatenation(List<BufferedImage> images) {
+        BufferedImage resultCollage = new BufferedImage(600, 500, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = resultCollage.createGraphics();
+        int count = 0;
+        for (int i=0; i<=500; i += 100) {
+            for (int j=0; j<=400; j+= 100) {
+                g2d.drawImage(images[count++], i, j, null);
+            }
+        }
+        g2d.dispose;
+        return resultCollage;
+    }
 	
 	private List<String> getImageResults(String querry){
 		String key = "%20AIzaSyBAcczm4OQMhZvTE5dIX8LeaKaYjcGt2aU";
@@ -117,7 +130,7 @@ public class CollageBuilder {
         g.rotate(Math.toRadians(angle), w/2, h/2);  
         g.drawImage(img, null, 0, 0);  
         return rotatedImage;  
-    }  
+    }
 	
 	//generates a random angle
 	public int generateRandomAngle() {
