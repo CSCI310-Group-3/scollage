@@ -68,6 +68,16 @@
 		margin: 0 auto;
 		display: block;
 	}
+	h2#insufficientImages{
+		font-size: 18pt;
+		font-family: system-ui;
+		margin: 0 auto;
+		display: block;
+		width: 800px;
+		height: 280px;
+		padding-top: 280px;
+		text-align: center;
+	}
 	img.galleryImage{
 		height: 80px;
 		margin-left: 5px;
@@ -110,8 +120,8 @@
 	<title>Build Another Collage</title>
 	</head>
 	<body>
-		<div id="header">
-			<h1 id="title">Collage for Topic Halfond</h1>
+		<div id="header" style="display: none">
+			<h1 id="title">Title</h1>
 			<div id="export">
 				<!-- <form name="export" id="export" method="POST" action="" enctype="multipart/form-data">
 					<input type="Submit" id="exportButton" name="export" value="Export" />
@@ -121,7 +131,8 @@
 			</div>
 		</div>
 		<div id="mainSpace">
-			<img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg">
+			<img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg" style="display: none">
+			<h2 id="insufficientImages">Insufficient number of images found</h2>
 		</div>
 		<div id="newInput">
 			<form name="enterTopic" id="inputForm" method="POST" action="" enctype="multipart/form-data">
@@ -131,7 +142,7 @@
 		</div>
 		<div id="galleryOuter">
 			<div id="galleryInner">
-				<a id="galleryCollage-0" class="galleryLink" style="display: none" onclick="clickedGallery('0')">
+				<a id="galleryCollage-0" class="galleryLink" onclick="clickedGallery('0')">
 					<img class="galleryImage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg" alt="Halfond">
 				</a>
 				<a id="galleryCollage-1" class="galleryLink" onclick="clickedGallery('1')">
@@ -185,10 +196,33 @@
     	// exportDiv.href = newImg;
 
     	var exportDiv = document.getElementById('exportButton');
-    	exportDiv.href = img.src
+    	exportDiv.href = img.src;
+    }
+
+    function displayErrorMsg(){
+    	var mainCollage = document.getElementById('mainCollage');
+    	mainCollage.style.display = 'none';
+
+    	var header = document.getElementById('header');
+    	header.style.display = 'none';
+
+    	var insufficientImagesMsg = document.getElementById('insufficientImages');
+    	insufficientImagesMsg.style.display = 'block';
+    }
+
+    function displayMainCollage(){
+    	var mainCollage = document.getElementById('mainCollage');
+    	mainCollage.style.display = 'block';
+
+    	var header = document.getElementById('header');
+    	header.style.display = 'block';
+
+    	var insufficientImagesMsg = document.getElementById('insufficientImages');
+    	insufficientImagesMsg.style.display = 'none';
     }
 
     function clickedGallery(divNum){
+    	displayMainCollage();
     	var clickedImgId = ("galleryCollage-" + divNum);
     	var galleryMainDiv = document.getElementById('galleryInner');
     	var galleryImages = galleryMainDiv.children;
