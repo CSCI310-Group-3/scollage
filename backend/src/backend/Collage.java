@@ -1,3 +1,4 @@
+package backend;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.net.URL;

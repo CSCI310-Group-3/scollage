@@ -1,9 +1,22 @@
+package backend;
+
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class CollageBuilder {
 	
@@ -20,12 +33,80 @@ public class CollageBuilder {
 	}
 	
 	//builds the collage
-	public void buildCollage() {
+	public void buildCollage(String querry) {
 		//get json from google
+		List<String> images = getImageResults(querry);
+		for(String s : images) {
+			System.out.println(s);
+		}
 		//populate the collages list with 30 collage objects
 		//apply rotations and sizing to all images in list
 	}
 	
+	private List<String> getImageResults(String querry){
+		String key = "%20AIzaSyBAcczm4OQMhZvTE5dIX8LeaKaYjcGt2aU";
+		String id = "001699835611631837436:s1dpcehsldo";
+		String searchTerms = querry;
+		List<String> imageResults = new ArrayList<String>();
+		List<BufferedReader> brArray = new ArrayList<BufferedReader>();
+		List<String> jsonStrings = new ArrayList<String>();
+		
+		// loop 3 times, getting 10 search results each iteration
+		try {
+			// construct url for search api call
+			// get first 10
+			URL url1 = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
+				+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=1");
+			// get next 10
+			URL url2 = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
+					+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=11");
+			// get final 10
+			URL url3 = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
+					+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=21");
+			HttpURLConnection conn1 = (HttpURLConnection) url1.openConnection();
+			conn1.setRequestMethod("GET");
+			conn1.setRequestProperty("Accept", "application/json");
+			HttpURLConnection conn2 = (HttpURLConnection) url2.openConnection();
+			conn2.setRequestMethod("GET");
+			conn2.setRequestProperty("Accept", "application/json");
+			HttpURLConnection conn3 = (HttpURLConnection) url3.openConnection();
+			conn3.setRequestMethod("GET");
+			conn3.setRequestProperty("Accept", "application/json");
+			// setup input reader
+			brArray.add(new BufferedReader(new InputStreamReader(conn1.getInputStream())));
+			brArray.add(new BufferedReader(new InputStreamReader(conn2.getInputStream())));
+			brArray.add(new BufferedReader(new InputStreamReader(conn3.getInputStream())));
+			// loop through each connection/br and get json strings
+			for(int i = 0; i < 3; i++) {
+				// construct json string
+				String output = "";
+				String json = "";
+				while((output = brArray.get(i).readLine()) != null) {
+					json += output;
+				}
+				jsonStrings.add(json);
+			}
+		} catch(MalformedURLException mue) {
+			System.out.println("mue: " + mue.getMessage());
+		} catch(IOException ioe) {
+			System.out.println("ioe: " + ioe.getMessage());
+		}
+		// parse out each json string
+		for(int i = 0; i < 3; i++) {
+			// create json objects and parse out the image links
+			JsonElement jelement = new JsonParser().parse(jsonStrings.get(i));
+			JsonObject jobject = jelement.getAsJsonObject();
+			JsonArray jarray = jobject.getAsJsonArray("items");
+			// get the link strings and add them to the list of images
+			String link = "";
+			for(int j = 0; j < 10; j++) {
+				jobject = jarray.get(j).getAsJsonObject();
+				link = jobject.get("link").getAsString();
+				imageResults.add(link);
+			}
+		}
+		return imageResults;
+	}
 	
 	//rotates a given image with an angle
 	public static BufferedImage rotate(BufferedImage img, int angle) {  
