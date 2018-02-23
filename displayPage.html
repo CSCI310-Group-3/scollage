@@ -94,7 +94,7 @@
 	</head>
 	<body>
 		<div id="header">
-			<h1 id="title">Collage for Topic X</h1>
+			<h1 id="title">Collage for Topic Halfond</h1>
 			<div id="export">
 				<!-- <form name="export" id="export" method="POST" action="" enctype="multipart/form-data">
 					<input type="Submit" id="exportButton" name="export" value="Export" />
@@ -104,7 +104,6 @@
 		</div>
 		<div id="mainSpace">
 			<img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg">
-			
 		</div>
 		<div id="newInput">
 			<form name="enterTopic" id="inputForm" method="POST" action="" enctype="multipart/form-data">
@@ -114,8 +113,14 @@
 		</div>
 		<div id="galleryOuter">
 			<div id="galleryInner">
-				<a id="galleryCollage-1" class="galleryLink" onclick="clickedGallery('1')">
-					<img class="galleryImage" src="http://www.shapecollage.com/collages/collage-popart.jpg">
+				<a id="galleryCollage-1" class="galleryLink" style="display: none" onclick="clickedGallery('1')">
+					<img class="galleryImage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg" alt="Halfond">
+				</a>
+				<a id="galleryCollage-2" class="galleryLink" onclick="clickedGallery('2')">
+					<img class="galleryImage" src="http://www.shapecollage.com/collages/collage-popart.jpg" alt="Collage">
+				</a>
+				<a id="galleryCollage-3" class="galleryLink" onclick="clickedGallery('3')">
+					<img class="galleryImage" src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/543c245dd9bef5de74267dbf6c54a86e" alt="USC">
 				</a>
 			</div>
 		</div>
@@ -150,14 +155,26 @@
     	exportDiv.href = img
     }
     function clickedGallery(divNum){
-    	var anchorId = ("galleryCollage-" + divNum);
-    	var currDiv = document.getElementById(anchorId);
-    	var galleryImg = currDiv.children[0];
+    	var clickedImgId = ("galleryCollage-" + divNum);
+    	var galleryMainDiv = document.getElementById('galleryInner');
+    	var galleryImages = galleryMainDiv.children;
+    	for(i=0; i<galleryImages.length;i++){
+    		if(galleryImages[i].id == clickedImgId){
+    			galleryImages[i].style.display = 'none';
+    		} else{
+    			galleryImages[i].style.display = 'inline-block';
+    		}
+    	}
 
-    	var mainImg = document.getElementById('mainCollage');
-    	var tempImg = mainImg.src;
+    	var clickedImgContainer = document.getElementById(clickedImgId);
+    	var clickedImg = clickedImgContainer.children[0];
+    	var mainCollageImg = document.getElementById('mainCollage');
+    	mainCollageImg.src = clickedImg.src;
 
-    	mainImg.src = galleryImg.src;
-    	galleryImg.src = tempImg;
+    	var collageTitle = document.getElementById('title');
+    	console.log(collageTitle);
+    	var imgTopic = clickedImg.alt;
+    	collageTitle.innerHTML = ('Collage for topic ' + imgTopic);
+
     }
 </script>
