@@ -104,6 +104,7 @@
 					<input type="Submit" id="exportButton" name="export" value="Export" />
 				</form> -->
 				<a id = "exportButton" onclick="prepareDownload()" download>Export</a>
+		
 			</div>
 		</div>
 		<div id="mainSpace">
@@ -117,28 +118,28 @@
 		</div>
 		<div id="galleryOuter">
 			<div id="galleryInner">
-				<a id="galleryCollage-1" class="galleryLink" style="display: none" onclick="clickedGallery('1')">
+				<a id="galleryCollage-0" class="galleryLink" style="display: none" onclick="clickedGallery('0')">
 					<img class="galleryImage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg" alt="Halfond">
 				</a>
-				<a id="galleryCollage-2" class="galleryLink" onclick="clickedGallery('2')">
+				<a id="galleryCollage-1" class="galleryLink" onclick="clickedGallery('1')">
 					<img class="galleryImage" src="http://www.shapecollage.com/collages/collage-popart.jpg" alt="Collage">
 				</a>
-				<a id="galleryCollage-3" class="galleryLink" onclick="clickedGallery('3')">
+				<a id="galleryCollage-2" class="galleryLink" onclick="clickedGallery('2')">
 					<img class="galleryImage" src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/543c245dd9bef5de74267dbf6c54a86e" alt="USC">
 				</a>
-				<a id="galleryCollage-4" class="galleryLink" onclick="clickedGallery('4')">
+				<a id="galleryCollage-3" class="galleryLink" onclick="clickedGallery('3')">
 					<img class="galleryImage" src="https://s.abcnews.com/images/US/cute-dogs-gty-01-jpo-171116_12x5_992.jpg" alt="Dogs">
 				</a>
-				<a id="galleryCollage-5" class="galleryLink" onclick="clickedGallery('5')">
+				<a id="galleryCollage-4" class="galleryLink" onclick="clickedGallery('4')">
 					<img class="galleryImage" src="https://cdn.vox-cdn.com/thumbor/avciGramUJ8ljFGsKgmiBxShiS8=/0x0:3052x1934/1200x800/filters:focal(1282x723:1770x1211)/cdn.vox-cdn.com/uploads/chorus_image/image/55470069/669120050.0.jpg" alt="Soccer">
 				</a>
-				<a id="galleryCollage-6" class="galleryLink" onclick="clickedGallery('6')">
+				<a id="galleryCollage-5" class="galleryLink" onclick="clickedGallery('5')">
 					<img class="galleryImage" src="http://itmusings.com/pblog/300languages/100java/images/oracle_java.jpg" alt="Java">
 				</a>
-				<a id="galleryCollage-7" class="galleryLink" onclick="clickedGallery('7')">
+				<a id="galleryCollage-6" class="galleryLink" onclick="clickedGallery('6')">
 					<img class="galleryImage" src="https://static.pexels.com/photos/204611/pexels-photo-204611.jpeg" alt="Computer">
 				</a>
-				<a id="galleryCollage-8" class="galleryLink" onclick="clickedGallery('8')">
+				<a id="galleryCollage-7" class="galleryLink" onclick="clickedGallery('7')">
 					<img class="galleryImage" src="https://i.ytimg.com/vi/p3NXd3DhH08/maxresdefault.jpg" alt="Skateboard">
 				</a>
 			</div>
@@ -147,6 +148,7 @@
 </html>
 
 <script type="text/javascript">
+	
 	function editingStopped(){
         if(document.getElementById('inputBox').value.trim().length > 0) { 
             document.getElementById('submitButton').disabled = false; 
@@ -161,7 +163,6 @@
     	// canvas.id = "myCanvas";
     	// canvas.height = img.height;
     	// canvas.width = img.width;
-    	// console.log('hi');
     	// console.log(canvas.width);
     	// console.log(canvas.height);
     	// context = canvas.getContext('2d');
@@ -173,6 +174,7 @@
     	var exportDiv = document.getElementById('exportButton');
     	exportDiv.href = img.src
     }
+
     function clickedGallery(divNum){
     	var clickedImgId = ("galleryCollage-" + divNum);
     	var galleryMainDiv = document.getElementById('galleryInner');
@@ -191,9 +193,32 @@
     	mainCollageImg.src = clickedImg.src;
 
     	var collageTitle = document.getElementById('title');
-    	console.log(collageTitle);
     	var imgTopic = clickedImg.alt;
     	collageTitle.innerHTML = ('Collage for topic ' + imgTopic);
+    }
+
+    function addedNewCollage(imgObject){
+    	var galleryMainDiv = document.getElementById('galleryInner');
+    	var newCollageNum = galleryMainDiv.children.length;
+
+    	newCollageImg = document.createElement('img');
+    	newCollageImg.src = imgObject.imageUrl;
+    	newCollageImg.className = 'galleryImage';
+    	newCollageImg.alt = imgObject.title;
+
+    	newCollageLink = document.createElement('a');
+    	newCollageLink.id = ("galleryCollage-" + newCollageNum);
+    	newCollageLink.className = "galleryLink";
+    	newCollageLink.setAttribute("onclick","clickedGallery('" + newCollageNum + "')");
+    	
+    	newCollageLink.appendChild(newCollageImg);
+    	galleryMainDiv.appendChild(newCollageLink);
+    	console.log(newCollageNum);
+    	clickedGallery(newCollageNum);
+    	
+
+
 
     }
+
 </script>
