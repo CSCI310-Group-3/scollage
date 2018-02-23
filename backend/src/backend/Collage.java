@@ -1,4 +1,5 @@
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -8,7 +9,7 @@ public class Collage {
 	private String title;
 	private URL imageURL;
 	private Boolean display;
-	private Image image; //obtained from the url passed in constructor
+	private BufferedImage image; //obtained from the url passed in constructor
 	
 	public Collage(String title, URL imageURL, Boolean display) {
 		this.title = title;
@@ -16,19 +17,7 @@ public class Collage {
 		this.display = display;
 		
 		ImageIcon icon = new ImageIcon(imageURL);
-		this.image = icon.getImage();
-	}
-	
-	
-	//exports the image, not sure how to implement
-	public void export() {
-		
-	}
-	
-	//scales the collage, not sure how to implem,ent
-	public void scale() {
-		
-		
+		this.image = (BufferedImage) icon.getImage();
 	}
 
 
