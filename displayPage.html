@@ -120,26 +120,32 @@
 	<title>Build Another Collage</title>
 	</head>
 	<body>
+		<!-- header: contains the title and export button -->
 		<div id="header" style="display: none">
 			<h1 id="title">Title</h1>
 			<div id="export">
 				<!-- <form name="export" id="export" method="POST" action="" enctype="multipart/form-data">
 					<input type="Submit" id="exportButton" name="export" value="Export" />
 				</form> -->
-				<a id = "exportButton" onclick="prepareDownload()" download>Export</a>
-		
+				<a id = "exportButton" onclick="prepareDownload()" download="test.jpeg">Export</a>
 			</div>
 		</div>
+
+		<!-- mainSpace: contains either the main collage being displayed or the error msg -->
 		<div id="mainSpace">
 			<img id="mainCollage" src="http://www-bcf.usc.edu/~halfond/pics/headshot.jpg" style="display: none">
 			<h2 id="insufficientImages">Insufficient number of images found</h2>
 		</div>
+
+		<!-- newInput: contains the inputBox and the buildAnotherCollageButton -->
 		<div id="newInput">
 			<form name="enterTopic" id="inputForm" method="POST" action="" enctype="multipart/form-data">
 				<input type="text" id="inputBox" name="topic" placeholder="Enter topic" onkeyup="editingStopped()"/>
 				<input type="Submit" id="submitButton" name="build" value="Build Another Collage" disabled />
 			</form>
 		</div>
+
+		<!-- gallery: contains the previous collages that can be displayed -->
 		<div id="galleryOuter">
 			<div id="galleryInner">
 				<a id="galleryCollage-0" class="galleryLink" onclick="clickedGallery('0')">
@@ -173,6 +179,7 @@
 
 <script type="text/javascript">
 	
+	//User stopped writing on input box, disables button if there is no test 
 	function editingStopped(){
         if(document.getElementById('inputBox').value.trim().length > 0) { 
             document.getElementById('submitButton').disabled = false; 
@@ -180,6 +187,8 @@
             document.getElementById('submitButton').disabled = true;
         }
     }
+
+    //Links the image being displayed to the download button
     function prepareDownload(){
 		var img = document.getElementById('mainCollage');
 
@@ -199,6 +208,7 @@
     	exportDiv.href = img.src;
     }
 
+    //Hides header and main collage and displays error msg
     function displayErrorMsg(){
     	var mainCollage = document.getElementById('mainCollage');
     	mainCollage.style.display = 'none';
@@ -210,7 +220,8 @@
     	insufficientImagesMsg.style.display = 'block';
     }
 
-    function displayMainCollage(){
+	//Displays header and main collage and hides error msg
+    function displayMainCollageAndHeader(){
     	var mainCollage = document.getElementById('mainCollage');
     	mainCollage.style.display = 'block';
 
@@ -221,11 +232,17 @@
     	insufficientImagesMsg.style.display = 'none';
     }
 
+    //Logic for when gallery item is pressed.
     function clickedGallery(divNum){
-    	displayMainCollage();
+    	//Display main space and header in case error was prev displayed
+    	displayMainCollageAndHeader();
+
+    	//Get clicked collageID
     	var clickedImgId = ("galleryCollage-" + divNum);
     	var galleryMainDiv = document.getElementById('galleryInner');
     	var galleryImages = galleryMainDiv.children;
+
+    	//Going through all the collages in the gallery, displaying all but the one clicked
     	for(i=0; i<galleryImages.length;i++){
     		if(galleryImages[i].id == clickedImgId){
     			galleryImages[i].style.display = 'none';
@@ -234,11 +251,13 @@
     		}
     	}
 
+    	//Sending clicked collage to the main space
     	var clickedImgContainer = document.getElementById(clickedImgId);
     	var clickedImg = clickedImgContainer.children[0];
     	var mainCollageImg = document.getElementById('mainCollage');
     	mainCollageImg.src = clickedImg.src;
 
+    	//Setting title according to collage
     	var collageTitle = document.getElementById('title');
     	var imgTopic = clickedImg.alt;
     	collageTitle.innerHTML = ('Collage for topic ' + imgTopic);
