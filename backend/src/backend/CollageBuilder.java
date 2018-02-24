@@ -23,25 +23,27 @@ import com.google.gson.JsonParser;
 
 public class CollageBuilder {
     
-	public CollageBuilder(string searchTerms) {
+	public CollageBuilder() {
 		
 	}
 	
 	//returns true/false whether the collage list has 30 images or not
 	public boolean calculateSufficiecy() {
-		return (collages.size() == 30);
+		// TODO
+		return true;
 	}
 	
 	//builds the collage
-	public Collage buildCollage(String querry) {
+	public BufferedImage buildCollage(String querry) {
 		//get json from google
 		List<BufferedImage> images = getImageResults(querry);
 		//populate the collages list with 30 collage objects
 		//apply rotations and sizing to all images in list
-        for (int i=0; i<images.size; i++) {
-            images[i] = resize(images[i], 65, 65);
-            images[i] = addBorder(images[i], 5, 5);
-            images[i] = rotate(images[i], generateRandomAngle);
+        for (int i=0; i < 10; i++) {
+        	System.out.println(i);
+            images.set(i, resize(images.get(i), 65, 65));
+            //images.set(i, addBorder(images.get(i), 5));
+            images.set(i, rotate(images.get(i), generateRandomAngle()));
         }
         BufferedImage collage = concatenation(images);
         
@@ -62,7 +64,7 @@ public class CollageBuilder {
     }
 	
 	public List<BufferedImage> getImageResults(String querry){
-		String key = "%20AIzaSyBAcczm4OQMhZvTE5dIX8LeaKaYjcGt2aU";
+		String key = "%AIzaSyDAfhdpO02MK4s79iZo5Zd6RkNSE_wuuEE";
 		String id = "001699835611631837436:s1dpcehsldo";
 		String searchTerms = querry;
 		List<BufferedImage> imageResults = new ArrayList<BufferedImage>();
@@ -77,7 +79,7 @@ public class CollageBuilder {
 				+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=1");
 			// get next 10
 			URL url2 = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
-					+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=11");
+					+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=11&fileType=jpg");
 			// get final 10
 			URL url3 = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
 					+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=21");
@@ -115,6 +117,7 @@ public class CollageBuilder {
 				for(int j = 0; j < 10; j++) {
 					jobject = jarray.get(j).getAsJsonObject();
 					link = jobject.get("link").getAsString();
+					System.out.println(link);
 					URL temp = new URL(link);
 					imageResults.add(ImageIO.read(temp));
 				}
@@ -148,6 +151,9 @@ public class CollageBuilder {
 	
 	//takes in an image, and the new sizing requirements
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) {  
+		if(img == null) {
+			System.out.println("NULL IMAGE");
+		}
         int w = img.getWidth();  
         int h = img.getHeight();  
         BufferedImage dimg = new BufferedImage(newW, newH, img.getType());  
