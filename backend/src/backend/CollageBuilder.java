@@ -22,11 +22,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class CollageBuilder {
-	
-	private List<Collage> collages;
-	
-	public CollageBuilder() {
-		collages = new ArrayList<Collage>();
+    
+	public CollageBuilder(string searchTerms) {
 		
 	}
 	
@@ -36,11 +33,19 @@ public class CollageBuilder {
 	}
 	
 	//builds the collage
-	public void buildCollage(String querry) {
+	public Collage buildCollage(String querry) {
 		//get json from google
 		List<BufferedImage> images = getImageResults(querry);
 		//populate the collages list with 30 collage objects
 		//apply rotations and sizing to all images in list
+        for (int i=0; i<images.size; i++) {
+            images[i] = resize(images[i], 65, 65);
+            images[i] = addBorder(images[i], 5, 5);
+            images[i] = rotate(images[i], generateRandomAngle);
+        }
+        BufferedImage collage = concatenation(images);
+        
+        return collage;
 	}
     
     public static BufferedImage concatenation(List<BufferedImage> images) {
@@ -153,6 +158,7 @@ public class CollageBuilder {
         return dimg;  
     }  
 	
+    //add border
 	public static BufferedImage addBorder(BufferedImage img, int padding) {  
         int w = img.getWidth();  
         int h = img.getHeight();  
