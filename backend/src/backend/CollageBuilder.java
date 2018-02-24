@@ -1,5 +1,6 @@
 package backend;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -151,6 +152,20 @@ public class CollageBuilder {
         g.dispose();  
         return dimg;  
     }  
+	
+	public static BufferedImage addBorder(BufferedImage img, int padding) {  
+        int w = img.getWidth();  
+        int h = img.getHeight();  
+        BufferedImage newImage = new BufferedImage(w + padding, h + padding, img.getType());  
+        Graphics2D g = newImage.createGraphics(); 
+        g.setPaint(new Color(0,0,0,0));
+        g.fillRect(0, 0, img.getHeight()+padding, img.getWidth()+padding);
+        g.drawImage(img, img.getHeight(),img.getWidth(), null);
+        g.dispose();  
+        return newImage;  
+    }
+	
+	
 	
 	
 	
