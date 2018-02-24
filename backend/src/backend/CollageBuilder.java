@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -35,10 +37,7 @@ public class CollageBuilder {
 	//builds the collage
 	public void buildCollage(String querry) {
 		//get json from google
-		List<String> images = getImageResults(querry);
-		for(String s : images) {
-			System.out.println(s);
-		}
+		List<BufferedImage> images = getImageResults(querry);
 		//populate the collages list with 30 collage objects
 		//apply rotations and sizing to all images in list
 	}
@@ -49,18 +48,18 @@ public class CollageBuilder {
         int count = 0;
         for (int i=0; i<=500; i += 100) {
             for (int j=0; j<=400; j+= 100) {
-                g2d.drawImage(images[count++], i, j, null);
+                g2d.drawImage(images.get(count++), i, j, null);
             }
         }
-        g2d.dispose;
+        g2d.dispose();
         return resultCollage;
     }
 	
-	private List<String> getImageResults(String querry){
+	public List<BufferedImage> getImageResults(String querry){
 		String key = "%20AIzaSyBAcczm4OQMhZvTE5dIX8LeaKaYjcGt2aU";
 		String id = "001699835611631837436:s1dpcehsldo";
 		String searchTerms = querry;
-		List<String> imageResults = new ArrayList<String>();
+		List<BufferedImage> imageResults = new ArrayList<BufferedImage>();
 		List<BufferedReader> brArray = new ArrayList<BufferedReader>();
 		List<String> jsonStrings = new ArrayList<String>();
 		
@@ -99,25 +98,27 @@ public class CollageBuilder {
 				}
 				jsonStrings.add(json);
 			}
+			// parse out each json string
+			for(int i = 0; i < 3; i++) {
+				// create json objects and parse out the image links
+				JsonElement jelement = new JsonParser().parse(jsonStrings.get(i));
+				JsonObject jobject = jelement.getAsJsonObject();
+				JsonArray jarray = jobject.getAsJsonArray("items");
+				// get the link strings and add them to the list of images
+				String link = "";
+				for(int j = 0; j < 10; j++) {
+					jobject = jarray.get(j).getAsJsonObject();
+					link = jobject.get("link").getAsString();
+					URL temp = new URL(link);
+					imageResults.add(ImageIO.read(temp));
+				}
+			}
 		} catch(MalformedURLException mue) {
 			System.out.println("mue: " + mue.getMessage());
 		} catch(IOException ioe) {
 			System.out.println("ioe: " + ioe.getMessage());
 		}
-		// parse out each json string
-		for(int i = 0; i < 3; i++) {
-			// create json objects and parse out the image links
-			JsonElement jelement = new JsonParser().parse(jsonStrings.get(i));
-			JsonObject jobject = jelement.getAsJsonObject();
-			JsonArray jarray = jobject.getAsJsonArray("items");
-			// get the link strings and add them to the list of images
-			String link = "";
-			for(int j = 0; j < 10; j++) {
-				jobject = jarray.get(j).getAsJsonObject();
-				link = jobject.get("link").getAsString();
-				imageResults.add(link);
-			}
-		}
+		
 		return imageResults;
 	}
 	
