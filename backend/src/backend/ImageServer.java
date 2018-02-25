@@ -14,13 +14,14 @@ public class ImageServer extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        String email = request.getParameter("email");
-        
-        response.setContentType("text/html");
-        out.println("<html>");
-  
-        out.println("</html>");
+        String searchTerm = request.getQueryString();
+		
+	CollageBuilder cb = new CollageBuilder();
+	BufferedImage collage = cb.buildCollage(searchTerm);
+		
+	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	ImageIO.write(collage, "jpg", baos);
+	byte[] bytes = baos.toByteArray();
     }
     
     private void makeCollage () {
