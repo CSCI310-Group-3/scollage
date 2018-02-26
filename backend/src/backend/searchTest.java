@@ -1,10 +1,9 @@
 package backend;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.io.OutputStream;
 
 public class searchTest {
 	public static void main(String[] args) {
@@ -24,10 +23,11 @@ public class searchTest {
 		}*/
 		
 		CollageBuilder cb = new CollageBuilder();
-		BufferedImage image = cb.buildCollage("cats");
-		File outputfile = new File("test1.jpg");
+		Collage collage = cb.buildCollage("cats");
 		try {
-			ImageIO.write(image, "jpg", outputfile);
+			OutputStream out = new FileOutputStream("test.jpg");
+			out.write(collage.getImage());
+			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

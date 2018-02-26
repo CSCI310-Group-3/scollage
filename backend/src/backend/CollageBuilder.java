@@ -7,6 +7,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,7 +39,7 @@ public class CollageBuilder {
 	}
 	
 	//builds the collage
-	public BufferedImage buildCollage(String querry) {
+	public Collage buildCollage(String querry) {
 		//get json from google
 		List<BufferedImage> images = getImageResults(querry);
 		//populate the collages list with 30 collage objects
@@ -49,7 +50,17 @@ public class CollageBuilder {
             images.set(i, addBorder(images.get(i), 3));
             images.set(i, rotate(images.get(i), generateRandomAngle()));
         }
-        BufferedImage collage = concatenation(images);
+        BufferedImage bufferedCollage = concatenation(images);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Collage collage = null;
+        try {
+			ImageIO.write(bufferedCollage, "jpg", baos);
+	        byte[] bytes = baos.toByteArray();
+	        collage = new Collage(querry,bytes,calculateSufficiecy());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         return collage;
 	}

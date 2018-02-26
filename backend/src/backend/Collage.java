@@ -8,17 +8,16 @@ import javax.swing.ImageIcon;
 public class Collage {
 	
 	private String title;
-	private URL imageURL;
-	private Boolean display;
-	private BufferedImage image; //obtained from the url passed in constructor
+	private byte[] image;
+	private Boolean display; //obtained from the url passed in constructor
 	
-	public Collage(String title, URL imageURL, Boolean display) {
+	public Collage(String title, byte[] bytes, Boolean display) {
 		this.title = title;
-		this.imageURL = imageURL;
+		this.image = bytes;
 		this.display = display;
 		
-		ImageIcon icon = new ImageIcon(imageURL);
-		this.image = (BufferedImage) icon.getImage();
+		//ImageIcon icon = new ImageIcon(imageURL);
+		//this.image = (BufferedImage) icon.getImage();
 	}
 
 
@@ -27,17 +26,12 @@ public class Collage {
 	}
 
 
-	public URL getImageURL() {
-		return imageURL;
-	}
-
-
 	public Boolean getDisplay() {
 		return display;
 	}
 
 
-	public Image getImage() {
+	public byte[] getImage() {
 		return image;
 	}
 
