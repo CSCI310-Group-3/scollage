@@ -24,7 +24,7 @@ public class searchTest {
 		}*/
 		
 		CollageBuilder cb = new CollageBuilder();
-		BufferedImage image = cb.buildCollage("dog");
+		BufferedImage image = cb.buildCollage("cats");
 		File outputfile = new File("test1.jpg");
 		try {
 			ImageIO.write(image, "jpg", outputfile);

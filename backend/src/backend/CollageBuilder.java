@@ -7,10 +7,12 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,14 +57,8 @@ public class CollageBuilder {
     public static BufferedImage concatenation(List<BufferedImage> images) {
         BufferedImage resultCollage = new BufferedImage(750, 600, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = resultCollage.createGraphics();
-        //int count = 0;
-        //for (int i=0; i<=500; i += 100) {
-        //    for (int j=0; j<=400; j+= 100) {
-        //        g2d.drawImage(images.get(count++), i, j, null);
-        //    }
-        //}
-        int x = -57;
-        int y = -60;
+        int x = -59;
+        int y = -63;
         for(int i = 0; i < images.size(); i++) {
         	g2d.drawImage(images.get(i),null,x,y);
         	x += 125;
@@ -82,69 +78,61 @@ public class CollageBuilder {
 		List<BufferedImage> imageResults = new ArrayList<BufferedImage>();
 		List<BufferedReader> brArray = new ArrayList<BufferedReader>();
 		List<String> jsonStrings = new ArrayList<String>();
-		
+		List<URL> resultLinks = new ArrayList<URL>();
+		List<HttpURLConnection> searchConnections = new ArrayList<HttpURLConnection>();
 		try {
 			// construct url for search api call
 			// get first 10
-			URL url1 = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
-				+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=1&fileType=jpg");
-			// get next 10
-			URL url2 = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
-					+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=11&fileType=jpg");
-			// get final 10
-			URL url3 = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
-					+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=21&fileType=jpg");
-			HttpURLConnection conn1 = (HttpURLConnection) url1.openConnection();
-			conn1.setRequestMethod("GET");
-			conn1.setRequestProperty("Accept", "application/json");
-			HttpURLConnection conn2 = (HttpURLConnection) url2.openConnection();
-			conn2.setRequestMethod("GET");
-			conn2.setRequestProperty("Accept", "application/json");
-			HttpURLConnection conn3 = (HttpURLConnection) url3.openConnection();
-			conn3.setRequestMethod("GET");
-			conn3.setRequestProperty("Accept", "application/json");
-			// setup input readers
-			brArray.add(new BufferedReader(new InputStreamReader(conn1.getInputStream())));
-			brArray.add(new BufferedReader(new InputStreamReader(conn2.getInputStream())));
-			brArray.add(new BufferedReader(new InputStreamReader(conn3.getInputStream())));
-			// loop through each connection/br and get json strings
 			for(int i = 0; i < 3; i++) {
-				// construct json string
-				String output = "";
-				String json = "";
-				while((output = brArray.get(i).readLine()) != null) {
-					json += output;
-				}
-				jsonStrings.add(json);
+				URL url = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
+				+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=" + (i*10 + 1) + "&fields=items(link)");
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Accept", "application/json");
+				searchConnections.add(conn);
 			}
-			// parse out each json string
+			System.out.println("OPENED CONNECTIONS");
+			// setup input readers
+			SearchThread[] searches = new SearchThread[3];
 			for(int i = 0; i < 3; i++) {
-				// create json objects and parse out the image links
-				JsonElement jelement = new JsonParser().parse(jsonStrings.get(i));
-				JsonObject jobject = jelement.getAsJsonObject();
-				JsonArray jarray = jobject.getAsJsonArray("items");
-				// get the link strings and add them to the list of images
-				String link = "";
-				for(int j = 0; j < jarray.size(); j++) {
-					jobject = jarray.get(j).getAsJsonObject();
-					link = jobject.get("link").getAsString();
-					System.out.println(link);
-					URL temp = new URL(link);
-					HttpURLConnection httpcon = (HttpURLConnection) temp.openConnection();
-					httpcon.addRequestProperty("User-Agent", "Mozilla/4.76");
-					BufferedImage img = ImageIO.read(httpcon.getInputStream());
-					if(img == null) {
-						System.out.println("ADDING NULL IMAGE");
-					}
-					else {
-						imageResults.add(img);
-					}
+				searches[i] = new SearchThread(searchConnections.get(i));
+				searches[i].start();
+			}
+			for(int i = 0; i < 3; i++) {
+				try {
+					searches[i].join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+			}
+			for(int i = 0; i < 3; i++) {
+				resultLinks.addAll(searches[i].getURLs());
+			}
+			//System.setProperty("http.agent","Mozilla/4.76");
+			// parse out each json string
+			int httpThreadCount = 6;
+			System.out.println(resultLinks.size());
+			HttpConnectionThread[] connections = new HttpConnectionThread[httpThreadCount];
+			for(int i = 0; i < httpThreadCount; i++) {
+				connections[i] = new HttpConnectionThread(resultLinks.subList(i * 5, i * 5 + 5));
+				connections[i].start();
+			}
+			
+			for(int i = 0; i < httpThreadCount; i++) {
+				try {
+					connections[i].join();
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
+			}
+			for(int i = 0; i < httpThreadCount; i++) {
+				imageResults.addAll(connections[i].getImages());
 			}
 			
 			if(imageResults.size() < 30) {
 				URL fillUrl = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
-						+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=31&fileType=jpg");
+						+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=31&fields=items(link)");
 				HttpURLConnection conn = (HttpURLConnection) fillUrl.openConnection();
 				conn.setRequestMethod("GET");
 				conn.setRequestProperty("Accept", "application/json");
@@ -165,16 +153,20 @@ public class CollageBuilder {
 					System.out.println(link);
 					URL temp = new URL(link);
 					HttpURLConnection httpcon = (HttpURLConnection) temp.openConnection();
-					httpcon.addRequestProperty("User-Agent", "Mozilla/4.76");
-					BufferedImage img = ImageIO.read(httpcon.getInputStream());
-					if(img == null) {
-						System.out.println("ADDING NULL IMAGE");
-					}
-					else {
-						imageResults.add(img);
-						if(imageResults.size() == 30) {
-							break;
+					httpcon.addRequestProperty("User-Agent", "Mozilla/5.0 AppleWebKit/537.36 Chrome/64.0.3282 Safari/537.36");
+					try {
+						BufferedImage img = ImageIO.read(httpcon.getInputStream());
+						if(img == null) {
+							System.out.println("ADDING NULL IMAGE");
 						}
+						else {
+							imageResults.add(img);
+							if(imageResults.size() == 30) {
+								break;
+							}
+						}
+					} catch(FileNotFoundException fnfe) {
+						System.out.println("FILE NOT FOUND");
 					}
 				}
 				
