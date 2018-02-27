@@ -129,6 +129,9 @@ public class CollageBuilder {
 			// parse out each json string
 			int httpThreadCount = 6;
 			System.out.println(resultLinks.size());
+			if(resultLinks.size() < 30) {
+				return new ArrayList<BufferedImage>();
+			}
 			HttpConnectionThread[] connections = new HttpConnectionThread[httpThreadCount];
 			for(int i = 0; i < httpThreadCount; i++) {
 				connections[i] = new HttpConnectionThread(resultLinks.subList(i * 5, i * 5 + 5));
