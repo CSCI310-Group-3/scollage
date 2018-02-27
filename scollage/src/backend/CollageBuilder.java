@@ -41,10 +41,12 @@ public class CollageBuilder {
 	
 	//builds the collage
 	public Collage buildCollage(String querry) {
-		validCollage = false;
+		
 		//get json from google
 		List<BufferedImage> images = getImageResults(querry);
-		if(images.size() == 30) {
+		if(images.size() < 30) {
+			validCollage = false;
+		} else {
 			validCollage = true;
 		}
 		//populate the collages list with 30 collage objects
@@ -195,7 +197,6 @@ public class CollageBuilder {
 		} catch(IOException ioe) {
 			ioe.printStackTrace();
 		}
-		
 		return imageResults;
 	}
 	
