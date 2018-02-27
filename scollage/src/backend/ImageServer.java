@@ -26,11 +26,10 @@ public class ImageServer extends HttpServlet {
 
 		byte[] encoded = Base64.getEncoder().encode(collage.getImage());
 		String collageImageStr = new String(encoded);
-		System.out.println(collageImageStr);
 
 		session.setAttribute("collageImage", collageImageStr);
 		session.setAttribute("collageTitle", collage.getTitle());
-		session.setAttribute("collageValid", collage.getDisplay());
+		session.setAttribute("collageValid", String.valueOf(collage.getDisplay()));
 		RequestDispatcher dispatch = request.getRequestDispatcher("/displayPage.jsp");
 		dispatch.forward(request, response);
 	}

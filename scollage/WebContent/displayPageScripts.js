@@ -34,14 +34,23 @@ function displayErrorMsg(topic){
 	var mainCollage = document.getElementById('mainCollage');
 	mainCollage.style.display = 'none';
 
-	var exportDiv = document.getElementById('export');
-	exportDiv.style.display = 'block';
+	var exportButton = document.getElementById('exportButton');
+	exportButton.style.display = 'none';
 
 	var collageTitle = document.getElementById('title');
 	collageTitle.innerHTML = ('Collage for topic ' + topic);
 
 	var insufficientImagesMsg = document.getElementById('insufficientImages');
 	insufficientImagesMsg.style.display = 'block';
+	
+	//Displaying all in gallery
+	var galleryMainDiv = document.getElementById('galleryInner');
+	var galleryImages = galleryMainDiv.children;
+
+	//
+	for(i=0; i<galleryImages.length;i++){
+		galleryImages[i].style.display = 'inline-block';
+	}
 }
 
 //Displays header and main collage and hides error msg
@@ -49,8 +58,8 @@ function displayMainCollageAndHeader(){
 	var mainCollage = document.getElementById('mainCollage');
 	mainCollage.style.display = 'block';
 
-	var exportDiv = document.getElementById('export');
-	exportDiv.style.display = 'block';
+	var exportButton = document.getElementById('exportButton');
+	exportButton.style.display = 'block';
 
 	var insufficientImagesMsg = document.getElementById('insufficientImages');
 	insufficientImagesMsg.style.display = 'none';
@@ -113,16 +122,48 @@ function addedNewCollage(imgObject){
 }
 
 function loadFirstContent(title,imgData,isError){
-    	console.log(title);
-    	console.log(imgData);
-    	console.log(isError);
-    	if(isError == 'false'){
-    		newImg = {
-        			title: title,
-        			imageBase64: imgData
-        	}
-        	addedNewCollage(newImg);   		
-    	} else {
-    		displayErrorMsg(title);
-    	}
+    console.log(title);
+    console.log(imgData);
+    console.log(isError);
+    if(isError == 'true'){
+    	newImg = {
+       			title: title,
+       			imageBase64: imgData
+       	};
+       	addedNewCollage(newImg);   		
+    } else {
+    	displayErrorMsg(title);
+    }
+}
+
+function makeCollageRequest(){
+	event.preventDefault();
+	var querry = document.getElementById("inputBox").value;
+	var url = "BuildAnotherImageServer?topic=" + querry;
+	
+	var req = new XMLHttpRequest();
+	req.open("GET", url, true);
+	req.send();
+	req.onreadystatechange = function () {
+		if(req.readyState == 4 && req.status == 200) {
+			console.log(req.responseText);
+			var imgDataJson = JSON.parse(req.responseText);
+			var imgTitle = imgDataJson.collageTitle;
+			var imgData = imgDataJson.collageImage;
+			var imgValid = imgDataJson.collageValid;
+			
+			if(imgValid == 'true'){
+				var imgObject = {
+						title: imgTitle,
+						imageBase64: imgData
+				};
+				addedNewCollage(imgObject); 
+			} else {
+				displayErrorMsg(imgTitle);
+			}			
+		}
+	}
+	
+	
+	return false;
 }
