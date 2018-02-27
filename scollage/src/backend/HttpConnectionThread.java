@@ -4,17 +4,12 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class HttpConnectionThread extends Thread{
 	private List<URL> urls;
@@ -49,6 +44,7 @@ public class HttpConnectionThread extends Thread{
 			try {
 				httpcon = (HttpURLConnection) urls.get(i).openConnection();
 				httpcon.addRequestProperty("User-Agent", "Mozilla/5.0 AppleWebKit/537.36 Chrome/64.0.3282 Safari/537.36");
+				httpcon.setConnectTimeout(500);
 				System.out.println("Connection opened");
 				BufferedImage img = ImageIO.read(httpcon.getInputStream());
 				if(img == null) {
@@ -60,9 +56,11 @@ public class HttpConnectionThread extends Thread{
 				}
 			} catch(FileNotFoundException fnfe) {
 				System.out.println("FILE NOT FOUND");
+			} catch(SocketTimeoutException ste){
+				System.out.println("CONNECTION TIMEOUT");
 			} catch(IOException ioe) {
-				ioe.printStackTrace();
-			} finally {
+				System.out.println("ioe: " + ioe.getMessage());
+			}finally {
 				if(httpcon != null) {
 					httpcon.disconnect();
 				}

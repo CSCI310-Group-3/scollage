@@ -41,7 +41,6 @@ public class CollageBuilder {
 	
 	//builds the collage
 	public Collage buildCollage(String querry) {
-		
 		//get json from google
 		List<BufferedImage> images = getImageResults(querry);
 		if(images.size() < 30) {
@@ -92,7 +91,7 @@ public class CollageBuilder {
 	public List<BufferedImage> getImageResults(String querry){
 		String key = "AIzaSyBGtIg8lDEoz1y9stGxIBgBu37eEWgRt4s";
 		String id = "001699835611631837436:s1dpcehsldo";
-		String searchTerms = querry;
+		String searchTerms = querry.replace(' ', '+');
 		List<BufferedImage> imageResults = new ArrayList<BufferedImage>();
 		List<BufferedReader> brArray = new ArrayList<BufferedReader>();
 		List<String> jsonStrings = new ArrayList<String>();
@@ -129,14 +128,15 @@ public class CollageBuilder {
 			}
 			//System.setProperty("http.agent","Mozilla/4.76");
 			// parse out each json string
-			int httpThreadCount = 6;
+			int httpThreadCount = 10;
+			int subIndex = 30 / httpThreadCount;
 			System.out.println(resultLinks.size());
 			if(resultLinks.size() < 30) {
 				return new ArrayList<BufferedImage>();
 			}
 			HttpConnectionThread[] connections = new HttpConnectionThread[httpThreadCount];
 			for(int i = 0; i < httpThreadCount; i++) {
-				connections[i] = new HttpConnectionThread(resultLinks.subList(i * 5, i * 5 + 5));
+				connections[i] = new HttpConnectionThread(resultLinks.subList(i * subIndex, i * subIndex + subIndex));
 				connections[i].start();
 			}
 			
@@ -175,6 +175,7 @@ public class CollageBuilder {
 					URL temp = new URL(link);
 					HttpURLConnection httpcon = (HttpURLConnection) temp.openConnection();
 					httpcon.addRequestProperty("User-Agent", "Mozilla/5.0 AppleWebKit/537.36 Chrome/64.0.3282 Safari/537.36");
+					httpcon.setConnectTimeout(500);
 					try {
 						BufferedImage img = ImageIO.read(httpcon.getInputStream());
 						if(img == null) {
@@ -188,6 +189,8 @@ public class CollageBuilder {
 						}
 					} catch(FileNotFoundException fnfe) {
 						System.out.println("FILE NOT FOUND");
+					} catch(SocketTimeoutException ste) {
+						System.out.println("CONNECTION TIMEOUT");
 					}
 				}
 				
