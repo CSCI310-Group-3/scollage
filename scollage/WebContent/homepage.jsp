@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div>
-		<form name="homePage" id="input" method="POST" action="" enctype="multipart/form-data">
+		<form name="homePage" id="input" method="POST" action="ImageServer">
 			<input type="text" id="inputBox" name="topic" placeholder="Enter topic" onkeyup="editingStopped()"/>
 			<input type="Submit" id = "submitButton" name="build" value="Build Collage" disabled/>
 		</form>
