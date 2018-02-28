@@ -25,32 +25,23 @@ public class HttpConnectionThread extends Thread{
 	}
 	
 	public void run() {
-		/*System.out.println("Parsing json");
-		// create json objects and parse out the image links
-		JsonElement jelement = new JsonParser().parse(json);
-		JsonObject jobject = jelement.getAsJsonObject();
-		JsonArray jarray = jobject.getAsJsonArray("items");
-		// get the link strings and add them to the list of images
-		String link = "";
-		if(jarray == null) {
-			return;
-		}
-		for(int j = 0; j < jarray.size(); j++) {
-			jobject = jarray.get(j).getAsJsonObject();
-			link = jobject.get("link").getAsString();
-			System.out.println(link);*/
+		// loop through list of urls to make connections and get buffered image
 		for(int i = 0; i < urls.size(); i++) {
 			HttpURLConnection httpcon = null;
 			try {
+				// open http connection
 				httpcon = (HttpURLConnection) urls.get(i).openConnection();
 				httpcon.addRequestProperty("User-Agent", "Mozilla/5.0 AppleWebKit/537.36 Chrome/64.0.3282 Safari/537.36");
+				// timeout if conection takes longer than half a second
 				httpcon.setConnectTimeout(500);
 				System.out.println("Connection opened");
+				// get the image and convert it to a buffered image
 				BufferedImage img = ImageIO.read(httpcon.getInputStream());
 				if(img == null) {
 					System.out.println("NULL IMAGE");
 				}
 				else {
+					// add it list of images
 					images.add(img);
 					System.out.println("ADDED IMAGE");
 				}
