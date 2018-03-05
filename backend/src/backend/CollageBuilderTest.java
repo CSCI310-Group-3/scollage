@@ -3,6 +3,9 @@ package backend;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.awt.image.BufferedImage;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -20,7 +23,7 @@ public class CollageBuilderTest {
 	public void testBuildCollage() {
 		 CollageBuilder cb = new CollageBuilder();
 		 Collage test = cb.buildCollage("dog");
-		 assertNull(test);
+		 assertNotNull(test);
 	}
 	
 	@Test
@@ -40,7 +43,9 @@ public class CollageBuilderTest {
 
 	@Test
 	public void testGetImageResults() {
-		fail("Not yet implemented");
+		CollageBuilder cb = new CollageBuilder();
+		List<BufferedImage> test = cb.getImageResults("dog");
+		assertTrue(test.size() != 0);
 	}
 
 	@Test
