@@ -50,7 +50,11 @@ public class CollageBuilderTest {
 
 	@Test
 	public void testRotate() {
-		fail("Not yet implemented");
+		CollageBuilder cb = new CollageBuilder();
+		List<BufferedImage> test = cb.getImageResults("dog");
+		BufferedImage testImg= test.get(0);
+		BufferedImage testImg2 = cb.rotate(testImg, 10);
+		assertNotSame(testImg, testImg2);
 	}
 
 	@Test
