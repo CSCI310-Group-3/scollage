@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.Ignore;
 
 public class CollageBuilderTest {
 
