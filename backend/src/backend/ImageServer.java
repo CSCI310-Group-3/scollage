@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 public class ImageServer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void service(HttpServletRequest request, HttpServletResponse response)
+	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// get user input from page
 		String querry = (String) request.getParameter("topic");

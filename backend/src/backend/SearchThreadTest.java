@@ -1,11 +1,11 @@
 package backend;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class SearchThreadTest {
 		URL url = new URL(this.url);
 		HttpURLConnection c = (HttpURLConnection) url.openConnection();
 		SearchThread st = new SearchThread(c);
-		assertTrue(st.getURLs().size() == 0);
+		assertEquals(st.getURLs().size(),0);
 	}
 	
 	@Test
@@ -26,7 +26,7 @@ public class SearchThreadTest {
 		URL url = new URL(this.url);
 		HttpURLConnection c = (HttpURLConnection) url.openConnection();
 		SearchThread st = new SearchThread(c);
-		assertTrue(st != null && st.getURLs() != null);
+		assertNotNull(st.getURLs());
 	}
 	
 	@Test
@@ -36,6 +36,6 @@ public class SearchThreadTest {
 		SearchThread st = new SearchThread(c);
 		st.run();
 		st.join();
-		assertTrue(st.getURLs().size() > 0);
+		assertNotSame(st.getURLs().size(),0);
 	}
 }

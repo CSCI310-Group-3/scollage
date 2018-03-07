@@ -245,9 +245,6 @@ public class CollageBuilder {
 	
 	//takes in an image, and the new sizing requirements
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) {  
-		if(img == null) {
-			System.out.println("NULL IMAGE");
-		}
         int w = img.getWidth();  
         int h = img.getHeight();  
         // create target image

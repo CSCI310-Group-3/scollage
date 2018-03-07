@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
 
 public class HttpConnectionThreadTest{	
 	@Test
@@ -16,7 +15,7 @@ public class HttpConnectionThreadTest{
 		List<URL> urls = new ArrayList<URL>();
 		urls.add(url);
 		HttpConnectionThread conn = new HttpConnectionThread(urls);
-		assertTrue(conn.getImages().size() == 0);
+		assertEquals(conn.getImages().size(),0);
 	}
 	
 	@Test
@@ -25,17 +24,28 @@ public class HttpConnectionThreadTest{
 		List<URL> urls = new ArrayList<URL>();
 		urls.add(url);
 		HttpConnectionThread conn = new HttpConnectionThread(urls);
-		assertTrue(conn.getImages() != null);
+		assertNotNull(conn.getImages());
 	}
 	
 	@Test
 	public void testRun() throws MalformedURLException, InterruptedException {
-		URL url = new URL("https://i.ytimg.com/vi/SfLV8hD7zX4/maxresdefault.jpg");
+		URL url = new URL("https://wallpapersite.com/images/wallpapers/canine-dog-4287x2858-puppy-4k-4953.jpg");
 		List<URL> urls = new ArrayList<URL>();
 		urls.add(url);
 		HttpConnectionThread conn = new HttpConnectionThread(urls);
 		conn.run();
 		conn.join();
-		assertTrue(conn.getImages().size() == 1 && conn.getImages().get(0) != null);
+		assertEquals(conn.getImages().size(), 1);
+	}
+	
+	@Test
+	public void testInvalidRun() throws MalformedURLException, InterruptedException {
+		URL url = new URL("https://dog.jpg");
+		List<URL> urls = new ArrayList<URL>();
+		urls.add(url);
+		HttpConnectionThread conn = new HttpConnectionThread(urls);
+		conn.run();
+		conn.join();
+		assertEquals(conn.getImages().size(), 0);
 	}
 }

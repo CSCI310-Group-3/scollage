@@ -25,10 +25,6 @@ public class CollageTest {
 	@Test
 	public void testCollageConstructor() {
 		Collage c = new Collage("USC Fight On", null, true);
-		boolean valid = false;
-		if(c.getTitle().equals("USC Fight On") && c.getDisplay() && c.getImage() == null) {
-			valid = true;
-		}
-		assertTrue(valid);
+		assertTrue(c.getTitle().equals("USC Fight On"));
 	}
 }

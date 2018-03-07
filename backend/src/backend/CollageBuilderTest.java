@@ -12,7 +12,7 @@ public class CollageBuilderTest {
 	@Test
 	public void testValidCalculateSufficiecy() {
 		CollageBuilder cb = new CollageBuilder();
-        cb.buildCollage("dog");
+        cb.buildCollage("test123");
         boolean valid = cb.calculateSufficiecy();
         assertTrue(valid);
 	}
@@ -29,31 +29,21 @@ public class CollageBuilderTest {
 	public void testValidBuildCollage() {
 		 CollageBuilder cb = new CollageBuilder();
 		 Collage test = cb.buildCollage("dog");
-		 boolean valid = true;
-		 if(test == null) {
-			 valid = false;
-		 }
-		 if(test.getDisplay() == false) {
-			 valid = false;
-		 }
-		 assertTrue(valid);
+		 assertTrue(test.getDisplay());
 	}
 	
+	@Test
 	public void testInvalidBuildCollage() {
 		CollageBuilder cb = new CollageBuilder();
 		Collage test = cb.buildCollage("asdfuig2ior79iu73t9aosdufoogaowiurg23f3ougaef2jkasdhfiu");
-		boolean valid = true;
-		if(test.getDisplay() == false || test.getImage().equals("")) {
-			valid = false;
-		}
-		assertFalse(valid);
+		assertFalse(test.getDisplay());
 	}
 
 	@Test
 	public void testConcatenation() {
 		CollageBuilder cb = new CollageBuilder();
 		List<BufferedImage> images = cb.getImageResults("dog");
-		BufferedImage collage = cb.concatenation(images);
+		BufferedImage collage = CollageBuilder.concatenation(images);
 		assertNotNull(collage);
 	}
 
@@ -61,51 +51,58 @@ public class CollageBuilderTest {
 	public void testValidGetImageResults() {
 		CollageBuilder cb = new CollageBuilder();
 		List<BufferedImage> test = cb.getImageResults("dog");
-		assertTrue(test.size() == 30);
+		assertEquals(test.size(),30);
 	}
 	
 	@Test
 	public void testInvalidGetImageResults() {
 		CollageBuilder cb = new CollageBuilder();
 		List<BufferedImage> test = cb.getImageResults("asdfiug32r7o8agfo238rgalseiefuagsdbfjh3g2iryawie78fgsa");
-		assertTrue(test.size() < 30);
+		assertNotSame(test.size(),30);
 	}
 
 	@Test
 	public void testRotate() {
-		CollageBuilder cb = new CollageBuilder();
 		BufferedImage testImg = new BufferedImage(50,50,BufferedImage.TYPE_INT_ARGB);
-		BufferedImage testImg2 = cb.rotate(testImg, 10);
+		BufferedImage testImg2 = CollageBuilder.rotate(testImg, 10);
 		assertNotSame(testImg, testImg2);
 	}
 
 	@Test
-	public void testGenerateRandomAngle() {
-		boolean valid = true;
+	public void testUpperGenerateRandomAngle() {
 		CollageBuilder cb = new CollageBuilder();
-		int randomAngle = 0;
+		int rand = 0;
 		for(int i = 0; i < 100; i++) {
-			randomAngle = cb.generateRandomAngle();
-			if(randomAngle > 45 || randomAngle < -45) {
-				valid = false;
-			}
+			rand = cb.generateRandomAngle();
+			assertTrue(rand <= 45);
 		}
-		assertTrue(valid);
+	}
+	
+	@Test
+	public void testLowerGenerateRandomAngle() {
+		CollageBuilder cb = new CollageBuilder();
+		int rand = cb.generateRandomAngle();
+		assertTrue(rand >= -45);
 	}
 
 	@Test
-	public void testResize() {
+	public void testResizeWidth() {
 		BufferedImage img = new BufferedImage(50,50,BufferedImage.TYPE_INT_ARGB);
-		CollageBuilder cb = new CollageBuilder();
-		BufferedImage resizedImg = cb.resize(img, 100, 100);
-		assertTrue(resizedImg.getWidth() == 100 && resizedImg.getHeight() == 100);
+		BufferedImage resizedImg = CollageBuilder.resize(img, 100, 100);
+		assertEquals(resizedImg.getWidth(),100);
+	}
+	
+	@Test
+	public void testResizeHeight() {
+		BufferedImage img = new BufferedImage(50,50,BufferedImage.TYPE_INT_ARGB);
+		BufferedImage resizedImg = CollageBuilder.resize(img, 100, 100);
+		assertEquals(resizedImg.getHeight(),100);
 	}
 
 	@Test
 	public void testAddBorder() {
-		CollageBuilder cb = new CollageBuilder();
 		BufferedImage testImg = new BufferedImage(50,50,BufferedImage.TYPE_INT_ARGB);
-		BufferedImage testImg2 = cb.addBorder(testImg, 5);
+		BufferedImage testImg2 = CollageBuilder.addBorder(testImg, 5);
 		assertNotSame(testImg, testImg2);
 	}
 
