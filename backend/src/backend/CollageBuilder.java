@@ -56,17 +56,25 @@ public class CollageBuilder {
         // compile all images into 1 image
         BufferedImage bufferedCollage = concatenation(images);
         // convert buffered image into byte array
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos;
         // construct collage to return
         Collage collage = null;
         try {
-			ImageIO.write(bufferedCollage, "jpg", baos);
+        	System.out.println("Throw Exception");
+			baos = convertToBytes(bufferedCollage);
+			System.out.println("asdf");
 	        byte[] bytes = baos.toByteArray();
 	        collage = new Collage(querry,bytes,calculateSufficiecy());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("IOEXCEPTION WITH IMAGEIO.WRITE()");
 		}
         return collage;
+	}
+	
+	public ByteArrayOutputStream convertToBytes(BufferedImage img) throws IOException{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(img, "jpg", baos);
+		return baos;
 	}
     
     public static BufferedImage concatenation(List<BufferedImage> images) {
@@ -156,53 +164,41 @@ public class CollageBuilder {
 				imageResults.addAll(connections[i].getImages());
 			}
 			// if not enough valid images due to 403 errors, do another iteration of the process
-			if(imageResults.size() < 30) {
-				URL fillUrl = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
-						+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=31&fields=items(link)");
-				HttpURLConnection conn = (HttpURLConnection) fillUrl.openConnection();
-				conn.setRequestMethod("GET");
-				conn.setRequestProperty("Accept", "application/json");
-				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-				String output = "";
-				String json = "";
-				while((output = br.readLine()) != null) {
-					json += output;
-				}
-				JsonElement jelement = new JsonParser().parse(json);
-				JsonObject jobject = jelement.getAsJsonObject();
-				JsonArray jarray = jobject.getAsJsonArray("items");
-				// get the link strings and add them to the list of images
-				String link = "";
-				for(int j = 0; j < jarray.size(); j++) {
-					jobject = jarray.get(j).getAsJsonObject();
-					link = jobject.get("link").getAsString();
-					System.out.println(link);
-					URL temp = new URL(link);
-					HttpURLConnection httpcon = (HttpURLConnection) temp.openConnection();
-					httpcon.addRequestProperty("User-Agent", "Mozilla/5.0 AppleWebKit/537.36 Chrome/64.0.3282 Safari/537.36");
-					httpcon.setConnectTimeout(500);
-					try {
-						BufferedImage img = ImageIO.read(httpcon.getInputStream());
-						if(img == null) {
-							System.out.println("ADDING NULL IMAGE");
-						}
-						else {
-							imageResults.add(img);
-							if(imageResults.size() == 30) {
-								break;
-							}
-						}
-					} catch(FileNotFoundException fnfe) {
-						System.out.println("FILE NOT FOUND");
-					} catch(SocketTimeoutException ste) {
-						System.out.println("CONNECTION TIMEOUT");
-					}
-				}
-				
+			URL fillUrl = new URL("https://www.googleapis.com/customsearch/v1?key=" + key 
+					+ "&cx=" + id + "&q=" + searchTerms + "&searchType=image" + "&start=31&fields=items(link)");
+			HttpURLConnection conn = (HttpURLConnection) fillUrl.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String output = "";
+			String json = "";
+			while((output = br.readLine()) != null) {
+				json += output;
 			}
-		} catch(MalformedURLException mue) {
-			mue.printStackTrace();
-		} catch(IOException ioe) {
+			JsonElement jelement = new JsonParser().parse(json);
+			JsonObject jobject = jelement.getAsJsonObject();
+			JsonArray jarray = jobject.getAsJsonArray("items");
+			// get the link strings and add them to the list of images
+			String link = "";
+			for(int j = 0; j < jarray.size(); j++) {
+				jobject = jarray.get(j).getAsJsonObject();
+				link = jobject.get("link").getAsString();
+				System.out.println(link);
+				URL temp = new URL(link);
+				HttpURLConnection httpcon = (HttpURLConnection) temp.openConnection();
+				httpcon.addRequestProperty("User-Agent", "Mozilla/5.0 AppleWebKit/537.36 Chrome/64.0.3282 Safari/537.36");
+				httpcon.setConnectTimeout(500);
+				try {
+					BufferedImage img = ImageIO.read(httpcon.getInputStream());
+					if(imageResults.size() == 30) {
+						break;
+					}
+					imageResults.add(img);
+				} catch(FileNotFoundException fnfe) {
+					
+				}
+			}
+		}catch(IOException ioe) {
 			ioe.printStackTrace();
 		}
 		return imageResults;

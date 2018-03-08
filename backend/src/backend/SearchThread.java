@@ -34,19 +34,14 @@ public class SearchThread extends Thread{
 		// GET RESPONSE FROM GOOGLE API
 		try {
 			br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// CONSTRUCT JSON FROM RESPONSE
-		String output = "";
-		try {
+			String output = "";
 			while((output = br.readLine()) != null) {
 				json += output;
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("IOEXCEPTION IN SEARCH THREAD");
+			return;
 		}
 		System.out.println("Created new json: " + json);
 		
